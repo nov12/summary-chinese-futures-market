@@ -1,0 +1,11 @@
+tq:
+  username: tq-username
+  password: tq-password
+email:
+  account: email-account
+  password: email-password
+  smtp_host: smtp.qq.com
+  smtp_port: 465
+receivers:
+  - abc@qq.com
+  - def@qq.com
