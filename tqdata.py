@@ -156,7 +156,7 @@ class TqdataClient:
 
         # 生成方向列
         df_all['direction'] = df_all['extrema_day'].apply(
-            lambda x: '多' if x > 0 else '——' if x < 0 else '无')
+            lambda x: '多' if x > 0 else '空' if x < 0 else '—')
 
         # extrema_day列取绝对值
         df_all['extrema_day'] = df_all['extrema_day'].abs()
