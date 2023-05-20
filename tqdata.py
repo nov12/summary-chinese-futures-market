@@ -71,7 +71,7 @@ class TqdataClient:
         if self.api:
             self.api.close()
         self.inited = False
-        self.login(self._username, self._password)
+        self.login()
 
     def query_all_history(self):
         if not self.inited:
