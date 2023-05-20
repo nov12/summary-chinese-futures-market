@@ -1,4 +1,4 @@
-tq:
+tqsdk:
   username: tq-username
   password: tq-password
 email:
@@ -6,6 +6,6 @@ email:
   password: email-password
   smtp_host: smtp.qq.com
   smtp_port: 465
-receivers:
-  - abc@qq.com
-  - def@qq.com
+  receivers:
+    - abc@qq.com
+    - def@qq.com
