@@ -17,9 +17,10 @@ if __name__ == '__main__':
     tq.login()
     tq.query_contracts()
     tq.query_all_history()
+    df = tq.generate_extreme_dataframe()
 
     # 生成Markdown格式的字符串
-    markdown_str = email.convert2md(tq.daily_data)
+    markdown_str = email.convert2md(df)
     # 将Markdown格式的字符串转换为HTML
     html = email.convert2html(markdown_str)
     # 发送邮件
