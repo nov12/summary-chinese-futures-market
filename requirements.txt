@@ -3,4 +3,4 @@ tabulate
 numpy
 pandas
 tqsdk
-yaml
+pyyaml
