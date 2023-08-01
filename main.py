@@ -10,7 +10,7 @@ if __name__ == '__main__':
         config = yaml.load(f, Loader=yaml.FullLoader)
 
     tq = TqdataClient(config['tq']['username'], config['tq']
-                      ['password'], interval=config['tq']['intervals'])
+                      ['password'], intervals=config['tq']['intervals'])
     email = HtmlEmail(config['email']['account'], config['email']['password'],
                       config['email']['smtp_host'], config['email']['smtp_port'])
     receivers = config['email']['receivers']
