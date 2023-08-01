@@ -1,6 +1,7 @@
 import re
 import time
 from datetime import date, datetime, timedelta
+from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -12,7 +13,7 @@ class TqdataClient:
     Client for querying history data from Tianqin.
     """
 
-    def __init__(self, username: str, password: str):
+    def __init__(self, username: str, password: str, *args, **kwargs):
         self._username = username
         self._password = password
         self.inited = False
@@ -20,6 +21,7 @@ class TqdataClient:
         self.only_symbols: dict[list] = {}
         self.current_symbol: dict[list] = {}
         self.daily_data: dict[dict[pd.DataFrame]] = {}
+        self.intervals: dict[int] = kwargs.get('intervals', [90, 180, 270, 365])
 
     def login(self) -> bool:
         """"""
@@ -83,7 +85,8 @@ class TqdataClient:
             for symbol in self.only_symbols[exchange]:
                 contract = f"KQ.i@{exchange}.{symbol}"
                 print(f'{time.asctime()[4:-5]} - {contract}获取数据中……')
-                df = self.query_history(contract, 86400, 300)
+                days = max(self.intervals) // 7 * 5
+                df = self.query_history(contract, 86400, days)
 
                 # 将 datetime 设置为索引
                 df.set_index('datetime', inplace=True)
@@ -95,7 +98,7 @@ class TqdataClient:
                     'UTC').tz_convert('Asia/Shanghai')
 
                 self.daily_data.setdefault(exchange, {})[symbol] = df
-                time.sleep(3)
+                time.sleep(0.00001)
 
     def query_history(self, contract: str, interval: int = 86400, length: int = 300) -> pd.DataFrame:
         """
@@ -125,10 +128,9 @@ class TqdataClient:
         df = self.api.get_kline_serial(contract, interval, length)
         print(f"{time.asctime()[4:-5]} - {contract}数据获取完成！共有数据{len(df)}条。")
         self.reconnect()
-
         return df
 
-    def generate_extreme_dataframe(self, days: list = [90, 180, 270, 365]) -> pd.DataFrame:
+    def generate_extreme_dataframe(self, days: Optional[list] = None) -> pd.DataFrame:
         """
         检查峰谷值
         """
@@ -137,6 +139,9 @@ class TqdataClient:
 
         # 按照日期排序,倒序
         days.sort(reverse=True)
+
+        if days is None:
+            days = self.intervals
 
         data = []
         for exchange in self.daily_data.keys():
