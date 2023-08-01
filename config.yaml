@@ -1,6 +1,7 @@
 tqsdk:
   username: tq-username
   password: tq-password
+  interval: [182, 365, 547, 730]
 email:
   account: email-account
   password: email-password
