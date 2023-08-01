@@ -9,7 +9,8 @@ if __name__ == '__main__':
     with open('config.yaml', 'r') as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
 
-    tq = TqdataClient(config['tqsdk']['username'], config['tqsdk']['password'])
+    tq = TqdataClient(config['tq']['username'], config['tq']
+                      ['password'], interval=config['tq']['intervals'])
     email = HtmlEmail(config['email']['account'], config['email']['password'],
                       config['email']['smtp_host'], config['email']['smtp_port'])
     receivers = config['email']['receivers']
@@ -25,3 +26,4 @@ if __name__ == '__main__':
     html = email.convert2html(markdown_str)
     # 发送邮件
     email.send_html(receivers, '期货市场近期高低点汇总表', html)
+    tq.api.close()
