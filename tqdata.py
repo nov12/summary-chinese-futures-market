@@ -58,10 +58,11 @@ class TqdataClient:
 
         # 将合约放入字典中
         for symbol in symbols:
-            key, value = symbol.split('.')
-            self.current_symbol.setdefault(key, []).append(value)
-            self.only_symbols.setdefault(key, set()).add(
-                ''.join(filter(str.isalpha, value)))
+            if "@" in symbol:
+                continue
+            exchange, symbol = symbol.split(".")
+            self.current_symbol.setdefault(exchange, []).append(symbol)
+            self.only_symbols.setdefault(exchange, set()).add("".join(filter(str.isalpha, symbol)))
 
         # 将合约排序
         for key in self.only_symbols:
