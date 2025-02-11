@@ -125,9 +125,9 @@ class TqdataClient:
             return None
 
         # 如果合约存在，且有数据，则返回数据
-        df = self.api.get_kline_serial(contract, interval, length)
+        df = self.api.get_kline_serial(contract, interval, length).sort_values(by=["datetime"])
         print(f"{time.asctime()[4:-5]} - {contract}数据获取完成！共有数据{len(df)}条。")
-        self.reconnect()
+        # self.reconnect()
         return df
 
     def generate_extreme_dataframe(self, days: Optional[list] = None) -> pd.DataFrame:
