@@ -48,5 +48,5 @@ if __name__ == "__main__":
 
     # 保存为HTML文件
     if config["html"]["enable"]:
-        with open("index.html", "w") as f:
+        with open("index.html", "w", encoding="utf-8") as f:
             f.write(html)
