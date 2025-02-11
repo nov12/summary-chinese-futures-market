@@ -214,10 +214,12 @@ class TqdataClient:
         length = len(series)
 
         # 计算接近度
-        high_series = series[:length //
-                             2].map(lambda x: abs(x - series['today_high']) / series[0])[1:]
-        low_series = series[length //
-                            2:].map(lambda x: abs(series['today_low'] - x) / series[0])[1:]
+        high_series = series.iloc[: length // 2].map(
+            lambda x: abs(x - series["today_high"]) / series.iloc[0]
+        )[1:]
+        low_series = series.iloc[length // 2 :].map(lambda x: abs(series["today_low"] - x) / series.iloc[0])[
+            1:
+        ]
 
         # 获取到接近度的最大索引
         np.where(low_series == low_series.min())[0][-1]
