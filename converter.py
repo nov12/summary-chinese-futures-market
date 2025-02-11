@@ -10,10 +10,8 @@ class Coverter:
     将Markdown转换为HTML或将DataFrame转换为Markdown
     """
 
-    def __init__(self) -> None:
-        pass
-
-    def md2html(self, markdown_str: str) -> str:
+    @staticmethod
+    def md2html(markdown_str: str) -> str:
         """
         将Markdown转换为HTML
         """
@@ -23,7 +21,8 @@ class Coverter:
 
         return html
 
-    def add_html_header(self, html: str, title: str) -> str:
+    @staticmethod
+    def add_html_header(html: str, title: str) -> str:
         """
         为HTML增加网页头部的信息和表格样式以及标题
         """
@@ -49,7 +48,8 @@ class Coverter:
 
         return html
 
-    def add_timestamp(self, html: str) -> str:
+    @staticmethod
+    def add_timestamp(html: str) -> str:
         """
         为HTML增加时间戳
         """
@@ -60,7 +60,8 @@ class Coverter:
         else:
             html = f"{html}{time_stamp}"
 
-    def df2md(self, df: pd.DataFrame) -> str:
+    @staticmethod
+    def df2md(df: pd.DataFrame) -> str:
         """
         将DataFrame转换为Markdown
         """

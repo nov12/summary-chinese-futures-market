@@ -29,10 +29,10 @@ if __name__ == "__main__":
     tq.api.close()
 
     # 生成Markdown格式的字符串
-    markdown_str = Coverter.convert2md(df)
+    markdown_str = Coverter.df2md(df)
 
     # 将Markdown格式的字符串转换为HTML
-    html = Coverter.convert2html(markdown_str)
+    html = Coverter.md2html(markdown_str)
 
     # 为HTML增加网页头部的信息和表格样式以及标题
     html = Coverter.add_html_header(html, "期货市场近期高低点汇总表")
