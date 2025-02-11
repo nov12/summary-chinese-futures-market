@@ -138,11 +138,11 @@ class TqdataClient:
         if len(self.daily_data) == 0:
             return
 
-        # 按照日期排序,倒序
-        days.sort(reverse=True)
-
         if days is None:
             days = self.intervals
+
+        # 按照日期排序,倒序
+        days.sort(reverse=True)
 
         data = []
         for exchange in self.daily_data.keys():
