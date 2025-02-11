@@ -11,7 +11,9 @@ if __name__ == "__main__":
         config = yaml.load(f, Loader=yaml.FullLoader)
 
     tq = TqdataClient(
-        config["tq"]["username"], config["tq"]["password"], intervals=config["tq"]["intervals"]
+        config["tqsdk"]["username"],
+        config["tqsdk"]["password"],
+        intervals=config["tqsdk"]["intervals"],
     )
     if config["email"]["enable"]:
         email = Email(
