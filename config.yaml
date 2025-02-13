@@ -13,3 +13,5 @@ email:
     - def@qq.com
 html:
   enable: true
+  path: /var/www/html
+  filename: tqsdk.html

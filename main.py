@@ -1,8 +1,10 @@
+from pathlib import Path
+
+import yaml
+
 from converter import Coverter
 from email_client import Email
 from tqdata import TqdataClient
-import yaml
-
 
 if __name__ == "__main__":
 
@@ -48,5 +50,7 @@ if __name__ == "__main__":
 
     # 保存为HTML文件
     if config["html"]["enable"]:
-        with open("index.html", "w", encoding="utf-8") as f:
+        path = Path(config["html"].get("path", "./") + "/" + config["html"].get("filename", "output.html"))
+        Path(path.parent).mkdir(parents=True, exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
             f.write(html)
