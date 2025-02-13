@@ -21,14 +21,6 @@ if __name__ == "__main__":
         config["tqsdk"]["password"],
         intervals=config["tqsdk"]["intervals"],
     )
-    if config["email"]["enable"]:
-        email = Email(
-            config["email"]["account"],
-            config["email"]["password"],
-            config["email"]["smtp_host"],
-            config["email"]["smtp_port"],
-        )
-    receivers = config["email"]["receivers"]
 
     tq.login()
     tq.query_contracts()
@@ -50,11 +42,20 @@ if __name__ == "__main__":
 
     # 发送邮件
     if config["email"]["enable"]:
+        email = Email(
+            config["email"]["account"],
+            config["email"]["password"],
+            config["email"]["smtp_host"],
+            config["email"]["smtp_port"],
+        )
+        receivers = config["email"]["receivers"]
         email.send_html(receivers, "期货市场近期高低点汇总表", html)
 
     # 保存为HTML文件
     if config["html"]["enable"]:
-        path = Path(config["html"].get("path", "./") + "/" + config["html"].get("filename", "output.html"))
+        path = Path(
+            config["html"].get("path", "./") + "/" + config["html"].get("filename", "output.html")
+        )
         Path(path.parent).mkdir(parents=True, exist_ok=True)
         with open(path, "w", encoding="utf-8") as f:
             f.write(html)
