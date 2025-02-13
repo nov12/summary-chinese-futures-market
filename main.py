@@ -8,6 +8,10 @@ from tqdata import TqdataClient
 
 if __name__ == "__main__":
 
+    path = Path("/etc/scfm_config.yaml")
+    if not path.exists():
+        path = Path("config.yaml")
+
     # 读取配置文件
     with open("config.yaml", "r") as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
