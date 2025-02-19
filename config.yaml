@@ -14,4 +14,4 @@ email:
 html:
   enable: true
   path: /var/www/html
-  filename: tqsdk.html
+  filename: index.html
