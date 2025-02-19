@@ -10,10 +10,10 @@ if __name__ == "__main__":
 
     path = Path("/etc/scfm_config.yaml")
     if not path.exists():
-        path = Path("config.yaml")
+        path = Path("./config.yaml")
 
     # 读取配置文件
-    with open("config.yaml", "r") as f:
+    with open(path, "r") as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
 
     tq = TqdataClient(
