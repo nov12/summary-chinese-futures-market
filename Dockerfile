@@ -32,5 +32,6 @@ ENV TZ=Asia/Shanghai
 
 # 指定运行应用程序的命令
 COPY --from=base /codes/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["python", "-m", "summary.main"]

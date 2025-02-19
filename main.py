@@ -2,9 +2,9 @@ from pathlib import Path
 
 import yaml
 
-from converter import Coverter
-from email_client import Email
-from tqdata import TqdataClient
+from .converter import Coverter
+from .email_client import Email
+from .tqdata import TqdataClient
 
 if __name__ == "__main__":
 
