@@ -27,8 +27,10 @@ COPY --from=base /codes /pythonlib/summary/
 
 # 激活虚拟环境
 ENV PATH="/opt/venv/bin:$PATH"
-ENV PYTHONPATH="/pythonlib:$PYTHONPATH"
+ENV PYPATH="/pythonlib"
 ENV TZ=Asia/Shanghai
 
 # 指定运行应用程序的命令
-ENTRYPOINT ["python", "-m", "summary.main"]
+COPY --from=base /codes/entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["python", "-m", "summary.main"]
