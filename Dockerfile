@@ -4,7 +4,7 @@ ARG PYTHON_VER=3.13
 FROM python:${PYTHON_VER}-alpine AS base
 
 # 下载代码并安装依赖
-RUN apk add --update git \
+RUN apk add --update git gcc python3-dev musl-dev linux-headers build-base \
     && git clone https://github.com/nov12/summary-chinese-futures-market /codes \
     && cd /codes \
     && git checkout dev \
@@ -15,7 +15,7 @@ RUN apk add --update git \
 
 
 # 创建最终镜像
-FROM python:${PYTHON_VER}-alpine
+FROM python:${PYTHON_VER}-alpine AS finale
 
 # 设置工作目录和卷
 WORKDIR /workdir
