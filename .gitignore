@@ -162,3 +162,4 @@ cython_debug/
 # Generated HTML output files
 futures_summary_table.html
 test_output.html
+test_backward_compatibility.py
