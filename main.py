@@ -26,4 +26,12 @@ if __name__ == '__main__':
     html = email.convert2html(markdown_str)
     # 发送邮件
     email.send_html(receivers, '期货市场近期高低点汇总表', html)
+    
+    # 生成Vue.js美化的可排序HTML页面
+    vue_html = email.convert2vue_html(df, '期货市场近期高低点汇总表')
+    # 保存为HTML文件
+    with open('futures_summary_table.html', 'w', encoding='utf-8') as f:
+        f.write(vue_html)
+    print('Vue.js HTML文件已生成: futures_summary_table.html')
+    
     tq.api.close()
