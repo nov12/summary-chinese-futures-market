@@ -23,7 +23,7 @@ def test_convert2vue_html():
     df = pd.DataFrame(test_data)
     
     # 创建HtmlEmail实例（不需要实际的邮件配置来测试）
-    email = HtmlEmail('test@test.com', 'password', 'smtp.test.com', 465)
+    email = HtmlEmail('test@test.com', 'test_password', 'smtp.test.com', 465)
     
     # 生成Vue.js HTML
     vue_html = email.convert2vue_html(df, '测试期货市场汇总表')

@@ -76,6 +76,19 @@ class HtmlEmail:
     def convert2vue_html(self, df: pd.DataFrame, title: str = '期货市场近期高低点汇总表') -> str:
         """
         将DataFrame转换为使用Vue.js的可排序HTML表格
+        
+        Args:
+            df (pd.DataFrame): 要转换的数据框，包含期货市场数据
+            title (str, optional): HTML页面标题. 默认为 '期货市场近期高低点汇总表'
+        
+        Returns:
+            str: 完整的HTML字符串，包含Vue.js代码、样式和数据
+        
+        Example:
+            >>> email = HtmlEmail('account', 'password', 'smtp.example.com', 465)
+            >>> html = email.convert2vue_html(df, '期货数据表')
+            >>> with open('output.html', 'w', encoding='utf-8') as f:
+            ...     f.write(html)
         """
         # 将DataFrame转换为JSON格式的数据
         data_json = df.to_json(orient='records', force_ascii=False)
@@ -204,6 +217,11 @@ class HtmlEmail:
                     return [...this.tableData].sort((a, b) => {{
                         let aVal = a[this.sortColumn];
                         let bVal = b[this.sortColumn];
+                        
+                        // 处理null和undefined值
+                        if (aVal == null && bVal == null) return 0;
+                        if (aVal == null) return this.sortDirection === 'asc' ? 1 : -1;
+                        if (bVal == null) return this.sortDirection === 'asc' ? -1 : 1;
                         
                         // 尝试转换为数字进行比较
                         const aNum = parseFloat(aVal);
