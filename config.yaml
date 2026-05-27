@@ -1,8 +1,9 @@
 tqsdk:
   username: tq-username
   password: tq-password
-  intervals: [182, 365, 547, 730]
+  intervals: [91, 182, 365, 547]
 email:
+  enable: false
   account: email-account
   password: email-password
   smtp_host: smtp.qq.com
@@ -10,3 +11,7 @@ email:
   receivers:
     - abc@qq.com
     - def@qq.com
+html:
+  enable: true
+  path: /var/www/html
+  filename: index.html
