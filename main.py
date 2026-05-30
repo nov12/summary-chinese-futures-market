@@ -1,3 +1,4 @@
+import time
 from pathlib import Path
 
 import yaml
@@ -53,6 +54,7 @@ if __name__ == "__main__":
         )
         receivers = config["email"]["receivers"]
         email.send_html(receivers, "期货市场近期高低点汇总表", html)
+        print(f"{time.asctime()[4:-5]} - ✓ 邮件已发送至：{', '.join(receivers)}")
 
     # 保存为HTML文件
     if config["html"]["enable"]:
@@ -62,3 +64,4 @@ if __name__ == "__main__":
         Path(path.parent).mkdir(parents=True, exist_ok=True)
         with open(path, "w", encoding="utf-8") as f:
             f.write(vue_html)
+        print(f"{time.asctime()[4:-5]} - ✓ HTML文件已保存至：{path}")
