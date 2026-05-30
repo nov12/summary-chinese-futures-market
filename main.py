@@ -1,10 +1,11 @@
+import time
 from pathlib import Path
 
 import yaml
 
-from .converter import Coverter
-from .email_client import Email
-from .tqdata import TqdataClient
+from converter import Coverter
+from email_client import Email
+from tqdata import TqdataClient
 
 if __name__ == "__main__":
 
@@ -13,7 +14,7 @@ if __name__ == "__main__":
         path = Path("./config.yaml")
 
     # 读取配置文件
-    with open(path, "r") as f:
+    with open(path) as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
 
     tq = TqdataClient(
@@ -40,6 +41,9 @@ if __name__ == "__main__":
     # 为HTML增加时间戳
     html = Coverter.add_timestamp(html)
 
+    # 生成Vue.js美化的可排序HTML页面
+    vue_html = Coverter.vue_html(df, '期货市场近期高低点汇总表')
+
     # 发送邮件
     if config["email"]["enable"]:
         email = Email(
@@ -50,6 +54,7 @@ if __name__ == "__main__":
         )
         receivers = config["email"]["receivers"]
         email.send_html(receivers, "期货市场近期高低点汇总表", html)
+        print(f"{time.asctime()[4:-5]} - ✓ 邮件已发送至：{', '.join(receivers)}")
 
     # 保存为HTML文件
     if config["html"]["enable"]:
@@ -58,4 +63,5 @@ if __name__ == "__main__":
         )
         Path(path.parent).mkdir(parents=True, exist_ok=True)
         with open(path, "w", encoding="utf-8") as f:
-            f.write(html)
+            f.write(vue_html)
+        print(f"{time.asctime()[4:-5]} - ✓ HTML文件已保存至：{path}")

@@ -48,6 +48,7 @@ class TqdataClient:
         if not self.inited:
             return None
 
+        print(f"{time.asctime()[4:-5]} - 正在查询全部合约……")
         self.only_symbols.clear()
         self.current_symbol.clear()
 
@@ -60,11 +61,14 @@ class TqdataClient:
                 continue
             exchange, symbol = symbol.split(".")
             self.current_symbol.setdefault(exchange, []).append(symbol)
-            self.only_symbols.setdefault(exchange, set()).add("".join(filter(str.isalpha, symbol)))
+
+            m = re.match(r"^([A-Za-z]+)", symbol)
+            root_symbol = m.group(1) if m else "".join(filter(str.isalpha, symbol))
+            self.only_symbols.setdefault(exchange, set()).add(root_symbol)
 
         # 将合约排序
         for exchange in self.only_symbols:
-            self.only_symbols[exchange] = sorted(list(self.only_symbols[exchange]))
+            self.only_symbols[exchange] = sorted(self.only_symbols[exchange])
             self.current_symbol[exchange].sort()
 
     def reconnect(self):
@@ -128,9 +132,14 @@ class TqdataClient:
         else:
             return None
 
-        # 如果合约存在，且有数据，则返回数据
-        df = self.api.get_kline_serial(contract, interval, length).sort_values(by=["datetime"])
-        print(f"{time.asctime()[4:-5]} - {contract}数据获取完成！共有数据{len(df)}条。")
+        try:
+            # 如果合约存在，且有数据，则返回数据
+            df = self.api.get_kline_serial(contract, interval, length).sort_values(by=["datetime"])
+            print(f"{time.asctime()[4:-5]} - {contract}数据获取完成！共有数据{len(df)}条。")
+        except Exception as e:
+            print(f"{time.asctime()[4:-5]} - {contract}数据获取失败！错误信息：{e}")
+            return None
+
         # self.reconnect()
         return df
 
