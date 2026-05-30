@@ -2,9 +2,9 @@ from pathlib import Path
 
 import yaml
 
-from .converter import Coverter
-from .email_client import Email
-from .tqdata import TqdataClient
+from converter import Coverter
+from email_client import Email
+from tqdata import TqdataClient
 
 if __name__ == "__main__":
 
@@ -13,7 +13,7 @@ if __name__ == "__main__":
         path = Path("./config.yaml")
 
     # 读取配置文件
-    with open(path, "r") as f:
+    with open(path) as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
 
     tq = TqdataClient(
@@ -42,12 +42,23 @@ if __name__ == "__main__":
 
     # 生成Vue.js美化的可排序HTML页面
     vue_html = Coverter.vue_html(df, '期货市场近期高低点汇总表')
-    
-    # # 保存为HTML文件
-    # with open('futures_summary_table.html', 'w', encoding='utf-8') as f:
-    #     f.write(vue_html)
-    # print('Vue.js HTML文件已生成: futures_summary_table.html')
 
     # 发送邮件
-    email.send_html(receivers, '期货市场近期高低点汇总表', vue_html)
-    tq.api.close()
+    if config["email"]["enable"]:
+        email = Email(
+            config["email"]["account"],
+            config["email"]["password"],
+            config["email"]["smtp_host"],
+            config["email"]["smtp_port"],
+        )
+        receivers = config["email"]["receivers"]
+        email.send_html(receivers, "期货市场近期高低点汇总表", html)
+
+    # 保存为HTML文件
+    if config["html"]["enable"]:
+        path = Path(
+            config["html"].get("path", "./") + "/" + config["html"].get("filename", "output.html")
+        )
+        Path(path.parent).mkdir(parents=True, exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(vue_html)
