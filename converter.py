@@ -28,7 +28,7 @@ class Coverter:
         为HTML增加网页头部的信息和表格样式以及标题
         如果存在head内容则替换，包括标题
         """
-        head = """
+        head = f"""
         <head>
             <title>{title}</title>
             <style>
@@ -54,7 +54,7 @@ class Coverter:
                 }}
             </style>
         </head>
-        """.format(title=title)
+        """
         body = f'<body><div class="container"><h1>{title}</h1>{html}</div></body>'
 
         # 检查是否已经存在 <head> 标签
@@ -112,6 +112,8 @@ class Coverter:
         """
         # 将DataFrame转换为JSON格式的数据
         data_json = df.to_json(orient="records", force_ascii=False)
+        now = datetime.datetime.now()
+        generated_date = f"{now.year}年{now.month}月{now.day}日"
 
         # 获取列名
         columns = list(df.columns)
@@ -138,6 +140,18 @@ class Coverter:
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }}
+        .table-wrapper {{
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: #fff;
+        }}
+        .table-meta {{
+            margin-top: 6px;
+            text-align: right;
+            color: #666;
+            font-size: 14px;
+        }}
         h1 {{
             text-align: center;
             color: #333;
@@ -146,7 +160,7 @@ class Coverter:
         table {{
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            table-layout: fixed;
         }}
         th {{
             background-color: #4CAF50;
@@ -156,6 +170,12 @@ class Coverter:
             cursor: pointer;
             user-select: none;
             position: relative;
+            height: 44px;
+            line-height: 20px;
+            vertical-align: middle;
+            top: 0;
+            z-index: 2;
+            position: sticky;
         }}
         th:hover {{
             background-color: #45a049;
@@ -172,14 +192,31 @@ class Coverter:
         }}
         td {{
             border: 1px solid #ddd;
-            padding: 10px;
+            padding: 10px 12px;
             text-align: left;
+            height: 44px;
+            line-height: 20px;
+            vertical-align: middle;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }}
+        tbody tr {{
+            height: 44px;
         }}
         tr:nth-child(even) {{
             background-color: #f9f9f9;
         }}
         tr:hover {{
             background-color: #f0f0f0;
+        }}
+        .row-long td {{
+            color: #b42318;
+            font-weight: 600;
+        }}
+        .row-short td {{
+            color: #166534;
+            font-weight: 600;
         }}
         .info {{
             text-align: center;
@@ -192,27 +229,30 @@ class Coverter:
 <body>
     <div id="app" class="container">
         <h1>{title}</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th v-for="column in columns" 
-                        :key="column" 
-                        @click="sortBy(column)"
-                        :class="getSortClass(column)">
-                        {{{{ column }}}}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(row, index) in sortedData" :key="index">
-                    <td v-for="column in columns" :key="column">
-                        {{{{ row[column] }}}}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
         <div class="info">
             <p>点击列标题可以对该列进行排序</p>
+        </div>
+        <div class="table-meta">文件生成日期：{generated_date}</div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th v-for="column in columns"
+                            :key="column"
+                            @click="sortBy(column)"
+                            :class="getSortClass(column)">
+                            {{{{ column }}}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(row, index) in sortedData" :key="index" :class="getRowClass(row)">
+                        <td v-for="column in columns" :key="column" :title="row[column]">
+                            {{{{ row[column] }}}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -276,6 +316,16 @@ class Coverter:
                 getSortClass(column) {{
                     if (this.sortColumn === column) {{
                         return this.sortDirection === 'asc' ? 'sorted-asc' : 'sorted-desc';
+                    }}
+                    return '';
+                }},
+                getRowClass(row) {{
+                    const direction = row['方向'] ?? row['direction'];
+                    if (direction === '多') {{
+                        return 'row-long';
+                    }}
+                    if (direction === '空') {{
+                        return 'row-short';
                     }}
                     return '';
                 }}
