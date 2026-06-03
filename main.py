@@ -17,17 +17,21 @@ if __name__ == "__main__":
     with open(path) as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
 
-    tq = TqdataClient(
-        config["tqsdk"]["username"],
-        config["tqsdk"]["password"],
-        intervals=config["tqsdk"]["intervals"],
-    )
+    try:
+        tq = TqdataClient(
+            config["tqsdk"]["username"],
+            config["tqsdk"]["password"],
+            intervals=config["tqsdk"]["intervals"],
+        )
 
-    tq.login()
-    tq.query_contracts()
-    tq.query_all_history()
-    df = tq.generate_extreme_dataframe()
-    tq.api.close()
+        tq.login()
+        tq.query_contracts()
+        tq.query_all_history()
+        df = tq.generate_extreme_dataframe()
+        tq.api.close()
+    except Exception as e:
+        print(f"{time.asctime()[4:-5]} - ✗ 数据获取失败：{e}")
+        exit(1)
 
     # 生成Markdown格式的字符串
     markdown_str = Coverter.df2md(df)
